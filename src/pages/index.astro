@@ -42,6 +42,83 @@ import '../styles/global.css';
       </div>
       
     </main>
-    
+    <div id="chat-widget" class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+      <div id="chat-box" class="hidden w-80 sm:w-96 bg-gray-900 border border-gray-800 rounded-2xl shadow-2xl mb-4 overflow-hidden flex flex-col h-[400px]">
+        
+        <div class="bg-gray-950 p-4 border-b border-gray-800 flex justify-between items-center">
+          <div class="flex items-center gap-2">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            <h3 class="font-semibold text-gray-100">Haider's AI Clone</h3>
+          </div>
+          <button id="close-chat" class="text-gray-400 hover:text-white transition-colors text-xl leading-none">&times;</button>
+        </div>
+
+        <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-4 bg-gray-900/50">
+          <div class="bg-gray-800 text-gray-200 text-sm p-3 rounded-lg rounded-tl-none inline-block max-w-[85%] leading-relaxed border border-gray-700/50">
+            أهلاً بك! أنا الوكيل الذكي الخاص بالمهندس حيدر. يمكنك سؤالي عن هندسة الاتصالات، مسارات الأتمتة التي يبنيها، أو خبراته التقنية. كيف يمكنني مساعدتك؟
+          </div>
+        </div>
+
+        <div class="p-3 border-t border-gray-800 bg-gray-950">
+          <form id="chat-form" class="flex gap-2">
+            <input type="text" id="chat-input" placeholder="اكتب رسالتك هنا..." class="flex-1 bg-gray-900 border border-gray-700 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-none" required autocomplete="off" dir="rtl">
+            <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white font-medium rounded-lg text-sm px-4 py-2 transition-colors">إرسال</button>
+          </form>
+        </div>
+      </div>
+
+      <button id="chat-toggle" class="bg-blue-600 hover:bg-blue-500 text-white rounded-full p-4 shadow-[0_0_20px_rgba(37,99,235,0.4)] transition-transform hover:scale-110 flex items-center justify-center">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+        </svg>
+      </button>
+    </div>
+
+    <script>
+      const chatToggle = document.getElementById('chat-toggle');
+      const chatBox = document.getElementById('chat-box');
+      const closeChat = document.getElementById('close-chat');
+      const chatForm = document.getElementById('chat-form');
+      const chatInput = document.getElementById('chat-input');
+      const chatMessages = document.getElementById('chat-messages');
+
+      // فتح وإغلاق النافذة
+      chatToggle.addEventListener('click', () => {
+        chatBox.classList.toggle('hidden');
+        if(!chatBox.classList.contains('hidden')) chatInput.focus();
+      });
+
+      closeChat.addEventListener('click', () => {
+        chatBox.classList.add('hidden');
+      });
+
+      // التعامل مع الإرسال (مؤقتاً للواجهة فقط)
+      chatForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const message = chatInput.value.trim();
+        if (!message) return;
+
+        // طباعة رسالة الزائر
+        const userMsg = document.createElement('div');
+        userMsg.className = 'bg-blue-600 text-white text-sm p-3 rounded-lg rounded-tr-none ml-auto max-w-[85%] w-fit';
+        userMsg.textContent = message;
+        chatMessages.appendChild(userMsg);
+        
+        chatInput.value = '';
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        // محاكاة الاتصال بالسيرفر (سنستبدلها بربط n8n لاحقاً)
+        setTimeout(() => {
+          const aiMsg = document.createElement('div');
+          aiMsg.className = 'bg-gray-800 text-gray-400 text-xs p-3 rounded-lg rounded-tl-none inline-block max-w-[85%] italic border border-gray-700/50';
+          aiMsg.textContent = 'جاري الاتصال بمسار n8n... (هذا الرد مؤقت حتى نقوم بهندسة الـ Webhook الخلفي)';
+          chatMessages.appendChild(aiMsg);
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+        }, 800);
+      });
+    </script>
   </body>
 </html>
